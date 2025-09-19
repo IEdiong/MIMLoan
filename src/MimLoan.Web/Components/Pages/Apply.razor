@@ -1,5 +1,10 @@
 @page "/apply"
+@using MimLoan.Application.DTOs
+@using MimLoan.Application.Interfaces
+@using MimLoan.Web.Models
 @rendermode InteractiveServer
+@inject ILoanApplicationService LoanService
+@inject NavigationManager NavigationManager
 @inject ILogger<Apply> Logger
 
 <h3>Loan Application</h3>
@@ -40,9 +45,9 @@
     </div>
 
     <div class="mb-3">
-        <label for="amount">Loan Amount (₦)</label>
+        <label for="amount">Loan Amount (NGN)</label>
         <InputNumber id="amount" class="form-control" @bind-Value="model.LoanAmount"/>
-        <span class="form-text">Minimum ₦20,000.00 and Maximum ₦50,000.00</span>
+        <span class="form-text">Minimum @(20000.ToString("C")) and Maximum @(50000.ToString("C"))</span>
         <ValidationMessage For="@(() => model.LoanAmount)"/>
     </div>
 
@@ -50,7 +55,7 @@
 </EditForm>
 
 @code {
-    private LoanApplicationModel model = new();
+    private LoanApplicationModel model = new() { DateOfBirth = new DateTime(2001, 1, 1) };
 
     private async Task HandleValidSubmit()
     {

@@ -1,4 +1,9 @@
 @page "/admin/applications"
+@using MimLoan.Application.Interfaces
+@using MimLoan.Domain.Entities
+@using MimLoan.Domain.Enums
+@inject ILoanApplicationService LoanApplicationService
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Loan Applications</PageTitle>
@@ -53,7 +58,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _applications = await LoanService.GetAllApplicationsAsync();
+        _applications = await LoanApplicationService.GetAllApplicationsAsync();
     }
 
     private void ViewDetails(int applicationId)

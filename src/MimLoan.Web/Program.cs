@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using MimLoan.Application.Interfaces;
 using MimLoan.Application.Services;
@@ -23,6 +24,11 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 builder.Services.AddScoped<ILoanApplicationRepository, LoanApplicationRepository>();
 builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
 builder.Services.AddScoped<ILoanCalculatorService, LoanCalculatorService>();
+
+// Set the culture to a specific one (e.g., "en-NG" for Nigeria)
+var culture = new CultureInfo("en-NG");
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
 
 var app = builder.Build();
 

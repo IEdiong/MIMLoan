@@ -1,24 +1,25 @@
 using MimLoan.Application.DTOs;
 using MimLoan.Application.Interfaces;
+using MimLoan.Domain.Constants;
 
 namespace MimLoan.Application.Services;
 
 public class LoanCalculatorService : ILoanCalculatorService
 {
-    private const int LOAN_TERM_MONTHS = 18;
-    private const decimal MONTHLY_INTEREST_RATE = 0.15m; // 15% monthly
-    
     public LoanCalulationResultDto CalculateLoan(decimal loanAmount)
     {
-        decimal totalInterest = loanAmount * MONTHLY_INTEREST_RATE * LOAN_TERM_MONTHS;
-        decimal totalPayable = loanAmount + totalInterest;
-        decimal monthlyRepayment = totalPayable / LOAN_TERM_MONTHS;
+        var r = LoanConstants.MonthlyInterestRate;
+        var n = LoanConstants.TermInMonths;
+
+        var monthlyRepayment = (double)loanAmount * (Math.Pow(1 + (double)r, n) * (double)r) / (Math.Pow(1 + (double)r, n) - 1);
+        var totalPayable = (decimal)monthlyRepayment * n;
+        var totalInterest = totalPayable - loanAmount;
 
         return new LoanCalulationResultDto(
             loanAmount,
-            LOAN_TERM_MONTHS,
-            MONTHLY_INTEREST_RATE,
-            monthlyRepayment,
+            n,
+            r,
+            (decimal)monthlyRepayment,
             totalPayable,
             totalInterest);
     }

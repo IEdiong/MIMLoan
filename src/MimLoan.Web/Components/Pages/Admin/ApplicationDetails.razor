@@ -25,20 +25,29 @@ else
                         <div class="col-md-6">
                             <h5>Personal Information</h5>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>Customer Name:</strong> @_application.CustomerName</li>
+                                <li class="list-group-item"><strong>Customer Name:</strong> @_application.CustomerName
+                                </li>
                                 <li class="list-group-item"><strong>Email:</strong> @_application.Email</li>
                                 <li class="list-group-item"><strong>Address:</strong> @_application.Address</li>
-                                <li class="list-group-item"><strong>Date of Birth:</strong> @_application.DateOfBirth.ToShortDateString()</li>
-                                <li class="list-group-item"><strong>Home Owner:</strong> @(_application.IsHomeOwner ? "Yes" : "No")</li>
+                                <li class="list-group-item"><strong>Date of
+                                        Birth:</strong> @_application.DateOfBirth.ToShortDateString()</li>
+                                <li class="list-group-item"><strong>Home
+                                        Owner:</strong> @(_application.IsHomeOwner ? "Yes" : "No")</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
                             <h5>Loan Information</h5>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>Loan Amount:</strong> @_application.LoanAmount.ToString("C")</li>
-                                <li class="list-group-item"><strong>Status:</strong> <span class="badge @GetBadgeClass(_application.Status)">@_application.Status</span></li>
-                                <li class="list-group-item"><strong>Submitted At:</strong> @_application.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</li>
-                                <li class="list-group-item"><strong>Processed At:</strong> @(_application.ProcessedAt?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")</li>
+                                <li class="list-group-item"><strong>Loan
+                                        Amount:</strong> @_application.LoanAmount.ToString("C")</li>
+                                <li class="list-group-item"><strong>Status:</strong> <span
+                                        class="badge @GetBadgeClass(_application.Status)">@_application.Status</span>
+                                </li>
+                                <li class="list-group-item"><strong>Submitted
+                                        At:</strong> @_application.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</li>
+                                <li class="list-group-item"><strong>Processed
+                                        At:</strong> @(_application.ProcessedAt?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -53,7 +62,8 @@ else
                         <h5>Loan Terms & Repayment</h5>
                     </div>
                     <div class="card-body">
-                        <p><strong>Interest Rate:</strong> @(_loanCalculation.MonthlyInterestRate * 100)% per month</p>
+                        <p><strong>Interest Rate:</strong> @(_loanCalculation.MonthlyInterestRate.ToString("P0")) per
+                            month</p>
                         <p><strong>Term:</strong> @_loanCalculation.TermMonths months</p>
                         <hr/>
                         <h5 class="card-title">Total Repayment: @_loanCalculation.TotalPayable.ToString("C")</h5>
@@ -74,8 +84,7 @@ else
 }
 
 @code {
-    [Parameter]
-    public int ApplicationId { get; set; }
+    [Parameter] public int ApplicationId { get; set; }
 
     private LoanApplication? _application;
     private LoanCalulationResultDto? _loanCalculation;
@@ -116,4 +125,5 @@ else
             _ => "bg-secondary"
         };
     }
+
 }
