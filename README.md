@@ -1,6 +1,6 @@
 # MIM Loan Application Portal
 
-This project is a web application portal for managing loan applications, built with Blazor Server and backed by a .NET 9 API and a MySQL database. It provides a platform for users to apply for loans and for administrators to manage the application process.
+This project is a web application portal for managing loan applications, built with Blazor Server and backed by a .NET 9, Entity Framework Core and a MySQL database. It provides a platform for users to apply for loans and for administrators to manage the application process.
 
 ## Installation and Setup
 
