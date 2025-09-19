@@ -46,18 +46,21 @@ else
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-white bg-dark">
-                <div class="card-header">
-                    <h5>Loan Terms & Repayment</h5>
+            @if (_loanCalculation != null)
+            {
+                <div class="card text-white bg-dark">
+                    <div class="card-header">
+                        <h5>Loan Terms & Repayment</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Interest Rate:</strong> @(_loanCalculation.MonthlyInterestRate * 100)% per month</p>
+                        <p><strong>Term:</strong> @_loanCalculation.TermMonths months</p>
+                        <hr/>
+                        <h5 class="card-title">Total Repayment: @_loanCalculation.TotalPayable.ToString("C")</h5>
+                        <p><strong>Monthly Payment:</strong> @_loanCalculation.MonthlyRepayment.ToString("C")</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p><strong>Interest Rate:</strong> @(LoanConstants.MonthlyInterestRate * 100)% per month</p>
-                    <p><strong>Term:</strong> @LoanConstants.TermInMonths months</p>
-                    <hr/>
-                    <h5 class="card-title">Total Repayment: @CalculateTotalRepayment().ToString("C")</h5>
-                    <p><strong>Monthly Payment:</strong> @((CalculateTotalRepayment() / LoanConstants.TermInMonths).ToString("C"))</p>
-                </div>
-            </div>
+            }
 
             @if (_application.Status == ApplicationStatus.Pending)
             {
@@ -75,10 +78,15 @@ else
     public int ApplicationId { get; set; }
 
     private LoanApplication? _application;
+    private LoanCalulationResultDto? _loanCalculation;
 
     protected override async Task OnInitializedAsync()
     {
         _application = await LoanService.GetApplicationByIdAsync(ApplicationId);
+        if (_application != null)
+        {
+            _loanCalculation = LoanCalculatorService.CalculateLoan(_application.LoanAmount);
+        }
     }
 
     private async Task ApproveApplication()
@@ -96,13 +104,6 @@ else
     private void GoBack()
     {
         NavigationManager.NavigateTo("/admin/applications");
-    }
-
-    private decimal CalculateTotalRepayment()
-    {
-        if (_application == null) return 0;
-        var totalInterest = _application.LoanAmount * LoanConstants.MonthlyInterestRate * LoanConstants.TermInMonths;
-        return _application.LoanAmount + totalInterest;
     }
 
     private string GetBadgeClass(ApplicationStatus status)
