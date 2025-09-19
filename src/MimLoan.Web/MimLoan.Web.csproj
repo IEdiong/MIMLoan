@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MimLoan.Application\MimLoan.Application.csproj" />
     <ProjectReference Include="..\MimLoan.Infrastructure\MimLoan.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -18,8 +18,26 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<LoanApplication>()
-            .Property(e => e.Status)
-            .HasConversion<string>();
+        
+        modelBuilder.Entity<LoanApplication>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+        
+            entity.Property(e => e.CustomerName)
+                .IsRequired()
+                .HasMaxLength(20);
+
+            entity.Property(e => e.Status)
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasConversion<string>();
+            
+            entity.Property(e => e.LoanAmount)
+                .HasPrecision(10, 2);
+            
+            entity.Property(e => e.SubmittedAt)
+                .ValueGeneratedOnAdd();
+        });
     }
 }

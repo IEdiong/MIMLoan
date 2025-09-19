@@ -1,6 +1,8 @@
 @page "/apply"
+@using MimLoan.Application.DTOs
+@using MimLoan.Application.Interfaces
 @rendermode InteractiveServer
-@* @inject ILoanApplicationService LoanService *@
+@inject ILoanApplicationService LoanService
 @inject NavigationManager NavigationManager
 @inject ILogger<Apply> Logger
 
@@ -59,22 +61,19 @@
         Logger.LogInformation(
             "Submitting application for {Name} with email {Email}. Amount: {Amount}, From address: {Address}, IsHomeOwner: {IsHomeOwner}, DateOfBirth: {DateOfBirth}",
             model.Name, model.Email, model.LoanAmount, model.Address, model.IsHomeOwner, model.DateOfBirth);
-        Console.WriteLine("Form submitted successfully.");
-        NavigationManager.NavigateTo("/success");
         await Task.CompletedTask;
 
 
-        // var dto = new LoanApplicationDto
-        // {
-        //     Name = model.Name,
-        //     Address = model.Address,
-        //     DateOfBirth = model.DateOfBirth!.Value,
-        //     Email = model.Email,
-        //     IsHomeOwner = model.IsHomeOwner,
-        //     LoanAmount = model.LoanAmount
-        // };
-        //
-        // var application = await LoanService.CreateApplicationAsync(dto);
+        var dto = new LoanApplicationDto(
+            Name: model.Name,
+            Address: model.Address,
+            DateOfBirth: model.DateOfBirth,
+            Email: model.Email,
+            IsHomeOwner: model.IsHomeOwner,
+            Amount: model.LoanAmount);
+
+        var application = await LoanService.CreateApplicationAsync(dto);
+        NavigationManager.NavigateTo("/success");
         // NavigationManager.NavigateTo($"/success/{application.Id}");
     }
 

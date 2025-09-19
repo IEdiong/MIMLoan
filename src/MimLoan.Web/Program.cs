@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using MimLoan.Application.Interfaces;
+using MimLoan.Application.Services;
 using MimLoan.Domain.Abstractions;
 using MimLoan.Infrastructure.Data;
 using MimLoan.Infrastructure.Repositories;
@@ -19,7 +21,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
         .EnableDetailedErrors());
 
 builder.Services.AddScoped<ILoanApplicationRepository, LoanApplicationRepository>();
-// builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
+builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
 
 var app = builder.Build();
 
