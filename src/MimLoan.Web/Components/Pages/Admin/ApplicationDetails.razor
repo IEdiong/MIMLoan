@@ -1,0 +1,118 @@
+@page "/admin/applications/{ApplicationId:int}"
+@rendermode InteractiveServer
+
+<PageTitle>Application Details</PageTitle>
+
+@if (_application == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Application Details</h3>
+        <button class="btn btn-secondary" @onclick="GoBack">Back to List</button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Applicant: @_application.CustomerName</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Personal Information</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Customer Name:</strong> @_application.CustomerName</li>
+                                <li class="list-group-item"><strong>Email:</strong> @_application.Email</li>
+                                <li class="list-group-item"><strong>Address:</strong> @_application.Address</li>
+                                <li class="list-group-item"><strong>Date of Birth:</strong> @_application.DateOfBirth.ToShortDateString()</li>
+                                <li class="list-group-item"><strong>Home Owner:</strong> @(_application.IsHomeOwner ? "Yes" : "No")</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Loan Information</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Loan Amount:</strong> @_application.LoanAmount.ToString("C")</li>
+                                <li class="list-group-item"><strong>Status:</strong> <span class="badge @GetBadgeClass(_application.Status)">@_application.Status</span></li>
+                                <li class="list-group-item"><strong>Submitted At:</strong> @_application.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</li>
+                                <li class="list-group-item"><strong>Processed At:</strong> @(_application.ProcessedAt?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-dark">
+                <div class="card-header">
+                    <h5>Loan Terms & Repayment</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Interest Rate:</strong> @(LoanConstants.MonthlyInterestRate * 100)% per month</p>
+                    <p><strong>Term:</strong> @LoanConstants.TermInMonths months</p>
+                    <hr/>
+                    <h5 class="card-title">Total Repayment: @CalculateTotalRepayment().ToString("C")</h5>
+                    <p><strong>Monthly Payment:</strong> @((CalculateTotalRepayment() / LoanConstants.TermInMonths).ToString("C"))</p>
+                </div>
+            </div>
+
+            @if (_application.Status == ApplicationStatus.Pending)
+            {
+                <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-success" @onclick="ApproveApplication">Approve</button>
+                    <button class="btn btn-danger" @onclick="RejectApplication">Reject</button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int ApplicationId { get; set; }
+
+    private LoanApplication? _application;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _application = await LoanService.GetApplicationByIdAsync(ApplicationId);
+    }
+
+    private async Task ApproveApplication()
+    {
+        await LoanService.UpdateApplicationStatusAsync(ApplicationId, ApplicationStatus.Approved);
+        GoBack();
+    }
+
+    private async Task RejectApplication()
+    {
+        await LoanService.UpdateApplicationStatusAsync(ApplicationId, ApplicationStatus.Rejected);
+        GoBack();
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/admin/applications");
+    }
+
+    private decimal CalculateTotalRepayment()
+    {
+        if (_application == null) return 0;
+        var totalInterest = _application.LoanAmount * LoanConstants.MonthlyInterestRate * LoanConstants.TermInMonths;
+        return _application.LoanAmount + totalInterest;
+    }
+
+    private string GetBadgeClass(ApplicationStatus status)
+    {
+        return status switch
+        {
+            ApplicationStatus.Approved => "bg-success",
+            ApplicationStatus.Rejected => "bg-danger",
+            ApplicationStatus.Pending => "bg-warning",
+            _ => "bg-secondary"
+        };
+    }
+}

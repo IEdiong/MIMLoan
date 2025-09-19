@@ -42,4 +42,9 @@ public class LoanApplicationService : ILoanApplicationService
     {
         return await _loanApplicationRepository.GetAllAsync();
     }
+
+    public async Task UpdateApplicationStatusAsync(int applicationId, ApplicationStatus newStatus)
+    {
+        await _loanApplicationRepository.UpdateStatusAsync(applicationId, newStatus);
+    }
 }

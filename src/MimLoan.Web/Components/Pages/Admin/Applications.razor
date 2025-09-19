@@ -1,7 +1,5 @@
 @page "/admin/applications"
-@using MimLoan.Domain.Entities
-@using MimLoan.Domain.Enums
-@inject ILoanApplicationService LoanApplicationService
+@rendermode InteractiveServer
 
 <PageTitle>Loan Applications</PageTitle>
 
@@ -42,7 +40,7 @@ else
                     </td>
                     <td>@app.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>
-                        <button class="btn btn-primary btn-sm">Details</button>
+                        <button class="btn btn-primary btn-sm" @onclick="() => ViewDetails(app.Id)">Details</button>
                     </td>
                 </tr>
             }
@@ -55,7 +53,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _applications = await LoanApplicationService.GetAllApplicationsAsync();
+        _applications = await LoanService.GetAllApplicationsAsync();
+    }
+
+    private void ViewDetails(int applicationId)
+    {
+        NavigationManager.NavigateTo($"/admin/applications/{applicationId}");
     }
 
     private string GetBadgeClass(ApplicationStatus status)
