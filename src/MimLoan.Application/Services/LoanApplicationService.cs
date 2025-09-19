@@ -33,8 +33,13 @@ public class LoanApplicationService : ILoanApplicationService
         return application;
     }
 
-    public Task<LoanApplication?> GetApplicationAsync(int applicationId)
+    public Task<LoanApplication?> GetApplicationByIdAsync(int applicationId)
     {
-        return _loanApplicationRepository.GetAsync(applicationId);
+        return _loanApplicationRepository.GetByIdAsync(applicationId);
+    }
+
+    public async Task<IEnumerable<LoanApplication>> GetAllApplicationsAsync()
+    {
+        return await _loanApplicationRepository.GetAllAsync();
     }
 }

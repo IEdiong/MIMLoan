@@ -6,5 +6,6 @@ namespace MimLoan.Application.Interfaces;
 public interface ILoanApplicationService
 {
     Task<LoanApplication> CreateApplicationAsync(LoanApplicationDto dto);
-    Task<LoanApplication?> GetApplicationAsync(int applicationId);
+    Task<LoanApplication?> GetApplicationByIdAsync(int applicationId);
+    Task<IEnumerable<LoanApplication>> GetAllApplicationsAsync();
 }

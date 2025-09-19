@@ -28,7 +28,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var application = await LoanService.GetApplicationAsync(ApplicationId);
+        var application = await LoanService.GetApplicationByIdAsync(ApplicationId);
         if (application != null)
         {
             LoanAmount = application.LoanAmount;
