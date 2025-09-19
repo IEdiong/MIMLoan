@@ -1,0 +1,80 @@
+@page "/apply"
+@using MimLoan.Web.Models
+@* @inject ILoanApplicationService LoanService *@
+@inject NavigationManager NavigationManager
+@inject ILogger<Apply> Logger
+
+<h3>Loan Application</h3>
+
+<EditForm Model="@model" FormName="LoanApplication" OnValidSubmit="@HandleValidSubmit" class="w-100">
+    <DataAnnotationsValidator/>
+    @* <ValidationSummary /> *@
+
+    <div class="mb-3">
+        <label for="name">Full Name</label>
+        <InputText id="name" class="form-control" @bind-Value="model.Name"/>
+        <ValidationMessage For="@(() => model.Name)"/>
+    </div>
+
+    <div class="mb-3">
+        <label for="address">Address</label>
+        <InputTextArea id="address" class="form-control" @bind-Value="model.Address" rows="3"/>
+        <ValidationMessage For="@(() => model.Address)"/>
+    </div>
+
+    <div class="mb-3">
+        <label for="dob">Date of Birth</label>
+        <InputDate id="dob" class="form-control" @bind-Value="model.DateOfBirth"/>
+        <span class="form-text">You must be at least 18 years old.</span>
+        <ValidationMessage For="@(() => model.DateOfBirth)"/>
+    </div>
+
+    <div class="mb-3">
+        <label for="email">Email Address</label>
+        <InputText id="email" type="email" class="form-control" @bind-Value="model.Email"/>
+        <ValidationMessage For="@(() => model.Email)"/>
+    </div>
+
+    <div class="mb-3">
+        <label>Home Owner</label>
+        <InputCheckbox id="homeowner" class="form-check-input" @bind-Value="model.IsHomeOwner"/>
+        <label for="homeowner" class="form-check-label">Yes</label>
+    </div>
+
+    <div class="mb-3">
+        <label for="amount">Loan Amount (₦)</label>
+        <InputNumber id="amount" class="form-control" @bind-Value="model.LoanAmount"/>
+        <span class="form-text">Minimum ₦20,000.00 and Maximum ₦50,000.00</span>
+        <ValidationMessage For="@(() => model.LoanAmount)"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Application</button>
+</EditForm>
+
+@code {
+    private LoanApplicationModel model = new();
+
+    private void HandleValidSubmit()
+    {
+        Logger.LogInformation(
+            "Submitting application for {Name} with email {Email}. Amount: {Amount}, From address: {Address}, IsHomeOwner: {IsHomeOwner}, DateOfBirth: {DateOfBirth}",
+            model.Name, model.Email, model.LoanAmount, model.Address, model.IsHomeOwner, model.DateOfBirth);
+        Console.WriteLine("Form submitted successfully.");
+        NavigationManager.NavigateTo("/success");
+        
+
+        // var dto = new LoanApplicationDto
+        // {
+        //     Name = model.Name,
+        //     Address = model.Address,
+        //     DateOfBirth = model.DateOfBirth!.Value,
+        //     Email = model.Email,
+        //     IsHomeOwner = model.IsHomeOwner,
+        //     LoanAmount = model.LoanAmount
+        // };
+        //
+        // var application = await LoanService.CreateApplicationAsync(dto);
+        // NavigationManager.NavigateTo($"/success/{application.Id}");
+    }
+
+}
