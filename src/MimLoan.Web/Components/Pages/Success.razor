@@ -1,6 +1,49 @@
-@page "/success"
-<h3>Success</h3>
+@page "/success/{ApplicationId:int}"
+
+<PageTitle>Success</PageTitle>
+
+<h3 class="text-center text-success mt-5">Application Submitted Successfully!</h3>
+<p class="text-center">Thank you for applying. Your application will now be evaluated.</p>
+
+<div class="loan-details">
+    <h3>Loan Details</h3>
+    <p><strong>Loan Amount:</strong> ₦@LoanAmount.ToString("N2")</p>
+    <p><strong>Term:</strong> 18 months</p>
+    <p><strong>Monthly Interest Rate:</strong> 15%</p>
+
+    <h3>Repayment Information</h3>
+    <p><strong>Number of Repayments:</strong> @NumberOfPayments</p>
+    <p><strong>Monthly Repayment Amount:</strong> ₦@MonthlyRepayment.ToString("N2")</p>
+    <p><strong>Total Amount Payable:</strong> ₦@TotalPayable.ToString("N2")</p>
+</div>
+
 
 @code {
-    
+    [Parameter] public int ApplicationId { get; set; }
+
+    private decimal LoanAmount;
+    private int NumberOfPayments = 18;
+    private decimal MonthlyRepayment;
+    private decimal TotalPayable;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var application = await LoanService.GetApplicationAsync(ApplicationId);
+        if (application != null)
+        {
+            LoanAmount = application.LoanAmount;
+            CalculateLoanDetails();
+        }
+    }
+
+    private void CalculateLoanDetails()
+    {
+        // Simple interest calculation (15% monthly)
+        // Note: This is extremely high - you might want to clarify if this is correct
+        decimal monthlyInterestRate = 0.15m;
+        decimal totalInterest = LoanAmount * monthlyInterestRate * NumberOfPayments;
+        TotalPayable = LoanAmount + totalInterest;
+        MonthlyRepayment = TotalPayable / NumberOfPayments;
+    }
+
 }

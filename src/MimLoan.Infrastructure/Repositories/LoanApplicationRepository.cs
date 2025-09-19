@@ -22,4 +22,9 @@ public class LoanApplicationRepository : ILoanApplicationRepository
         
         return application.Entity;
     }
+
+    public async Task<LoanApplication?> GetAsync(int applicationId)
+    {
+        return await _context.LoanApplications.FirstOrDefaultAsync(a => a.Id == applicationId);
+    }
 }

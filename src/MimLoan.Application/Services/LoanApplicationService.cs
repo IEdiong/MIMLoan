@@ -32,4 +32,9 @@ public class LoanApplicationService : ILoanApplicationService
         await _loanApplicationRepository.CreateAsync(application);
         return application;
     }
+
+    public Task<LoanApplication?> GetApplicationAsync(int applicationId)
+    {
+        return _loanApplicationRepository.GetAsync(applicationId);
+    }
 }

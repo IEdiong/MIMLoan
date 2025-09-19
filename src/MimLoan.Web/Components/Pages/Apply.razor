@@ -1,9 +1,5 @@
 @page "/apply"
-@using MimLoan.Application.DTOs
-@using MimLoan.Application.Interfaces
 @rendermode InteractiveServer
-@inject ILoanApplicationService LoanService
-@inject NavigationManager NavigationManager
 @inject ILogger<Apply> Logger
 
 <h3>Loan Application</h3>
@@ -73,8 +69,8 @@
             Amount: model.LoanAmount);
 
         var application = await LoanService.CreateApplicationAsync(dto);
-        NavigationManager.NavigateTo("/success");
-        // NavigationManager.NavigateTo($"/success/{application.Id}");
+        // NavigationManager.NavigateTo("/success");
+        NavigationManager.NavigateTo($"/success/{application.Id}");
     }
 
 }
