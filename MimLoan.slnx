@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/MimLoan.Domain/MimLoan.Domain.csproj" />
+    <Project Path="src/MimLoan.Infrastructure/MimLoan.Infrastructure.csproj" />
     <Project Path="src/MimLoan.Web/MimLoan.Web.csproj" />
   </Folder>
 </Solution>
