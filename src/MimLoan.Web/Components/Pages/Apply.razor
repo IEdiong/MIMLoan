@@ -1,5 +1,5 @@
 @page "/apply"
-@using MimLoan.Web.Models
+@rendermode InteractiveServer
 @* @inject ILoanApplicationService LoanService *@
 @inject NavigationManager NavigationManager
 @inject ILogger<Apply> Logger
@@ -54,14 +54,15 @@
 @code {
     private LoanApplicationModel model = new();
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
         Logger.LogInformation(
             "Submitting application for {Name} with email {Email}. Amount: {Amount}, From address: {Address}, IsHomeOwner: {IsHomeOwner}, DateOfBirth: {DateOfBirth}",
             model.Name, model.Email, model.LoanAmount, model.Address, model.IsHomeOwner, model.DateOfBirth);
         Console.WriteLine("Form submitted successfully.");
         NavigationManager.NavigateTo("/success");
-        
+        await Task.CompletedTask;
+
 
         // var dto = new LoanApplicationDto
         // {

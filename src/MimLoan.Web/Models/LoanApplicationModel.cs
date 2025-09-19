@@ -2,8 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using MimLoan.Web.Validations;
 
 namespace MimLoan.Web.Models;
-
-// View Model with Data Annotations
 public class LoanApplicationModel
 {
     [Required]
@@ -27,7 +25,5 @@ public class LoanApplicationModel
     [Range(20000, 50000)]
     public decimal LoanAmount { get; set; }
     
-    [Required]
-    [EmailAddress]
     public bool IsHomeOwner { get; set; }
 }
